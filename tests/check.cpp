@@ -5,7 +5,7 @@ SCENARIO("checking connection")
 {
     GIVEN("wrong token")
     {
-        std::map<std::string, std::string> wrong_settings{{"token", "123"}};
+        std::map<std::string, std::string> wrong_settings{{"token", "777"}};
 
         WHEN("client")
         {
@@ -13,7 +13,7 @@ SCENARIO("checking connection")
 
             THEN("connection failed")
             {
-                REQUIRE(!client.check_connection());
+		    REQUIRE(!client.check_connection()); 
             }
         }
     }

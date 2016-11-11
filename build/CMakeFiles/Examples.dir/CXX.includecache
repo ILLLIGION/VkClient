@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/vk/client.hpp
+string
+-
+map
+-
+
+/home/illligion/VkClient/examples/main.cpp
+vk/client.hpp
+-
+iostream
+-
+

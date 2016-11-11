@@ -1,0 +1,1 @@
+/usr/bin/c++    -fPIC   CMakeFiles/check.dir/tests/check.cpp.o CMakeFiles/check.dir/tests/main.cpp.o  -o check -rdynamic libVkClient.a -lssl -lcrypto -lcurl 

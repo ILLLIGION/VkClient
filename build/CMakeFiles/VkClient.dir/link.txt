@@ -1,0 +1,2 @@
+/usr/bin/ar qc libVkClient.a  CMakeFiles/VkClient.dir/sources/client.cpp.o
+/usr/bin/ranlib libVkClient.a

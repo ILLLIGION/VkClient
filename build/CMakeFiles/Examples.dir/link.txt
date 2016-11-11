@@ -1,0 +1,1 @@
+/usr/bin/c++    -fPIC   CMakeFiles/Examples.dir/examples/main.cpp.o  -o Examples -rdynamic libVkClient.a -lssl -lcrypto -lcurl 
