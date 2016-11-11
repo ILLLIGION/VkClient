@@ -1,6 +1,0 @@
-/home/illligion/VkClient/build/CMakeFiles/edit_cache.dir
-/home/illligion/VkClient/build/CMakeFiles/VkClient.dir
-/home/illligion/VkClient/build/CMakeFiles/Examples.dir
-/home/illligion/VkClient/build/CMakeFiles/test.dir
-/home/illligion/VkClient/build/CMakeFiles/check.dir
-/home/illligion/VkClient/build/CMakeFiles/rebuild_cache.dir
