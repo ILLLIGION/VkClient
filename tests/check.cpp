@@ -1,19 +1,35 @@
 #include <vk/client.hpp>
+#include "validInit.hpp"
 #include "catch.hpp"
 
-SCENARIO("checking connection")
+SCENARIO("client must check connection using a token")
 {
-    GIVEN("wrong token")
+    GIVEN("an invalid token")
     {
-        std::map<std::string, std::string> wrong_settings{{"token", "777"}};
+        std::map<std::string, std::string> invalid_settings{{"token", "123"}};
 
-        WHEN("client")
+        WHEN("initialize client")
         {
-            vk::Client client(wrong_settings);
+            Vk::Client client(invalid_settings);
 
-            THEN("connection failed")
+            THEN("check_connection() must return false")
             {
-		    REQUIRE(!client.check_connection()); 
+                REQUIRE(!client.check_connection());
+            }
+        }
+    }
+
+    GIVEN("a valid token")
+    {
+        std::map<std::string, std::string> valid_settings(get_valid_settings());
+
+        WHEN("initialize client")
+        {
+            Vk::Client client(valid_settings);
+
+            THEN("check_connection() must return true")
+            {
+                REQUIRE(client.check_connection());
             }
         }
     }

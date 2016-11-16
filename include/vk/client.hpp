@@ -1,7 +1,7 @@
 #include <string>
 #include <map>
 
-namespace vk
+namespace Vk
 {
     class Client
     {
@@ -9,6 +9,7 @@ namespace vk
         using dict_t = std::map<std::string, std::string>;
         Client(dict_t settings) : _settings(settings) {}
         auto check_connection() -> bool;
+        auto get_friends() -> void;
 
     private:
         dict_t _settings;
