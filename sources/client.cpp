@@ -14,7 +14,7 @@ namespace vk
         if (curl)
         {
             std::string fields = "access_token=" + _settings["token"] + "&v=5.59";
-            std::string buffer = "";
+            char* buffer = "";
 
             curl_easy_setopt(curl, CURLOPT_URL, "https://api.vk.com/method/account.getProfileInfo?");
             curl_easy_setopt(curl, CURLOPT_POST, 1L);
