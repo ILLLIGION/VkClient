@@ -1,11 +1,9 @@
 #include <curl/curl.h>
 #include <iostream>
-#include <vk/client.hpp>
-#include <vk/json.hpp>
+#include "../include/vk/client.hpp"
 
 namespace Vk
 {
-    using json = nlohmann::json;
 
     auto Client::check_connection() -> bool
     {
@@ -25,8 +23,8 @@ namespace Vk
 
             if (curl_easy_perform(curl) == CURLE_OK)
             {
-                json jsn_obj = json::parse(buffer);
-                json jsn_response = jsn_obj["response"];
+                Vk::Client::json jsn_obj = json::parse(buffer);
+                Vk::Client::json jsn_response = jsn_obj["response"];
 
                 if (!jsn_response.is_null())
                 {
@@ -40,7 +38,7 @@ namespace Vk
         return false;
     }
 
-    auto Client::get_friends() -> void
+    auto Client::get_friends() -> Vk::Client::json 
     {
         CURL *curl = curl_easy_init();
 
@@ -58,39 +56,39 @@ namespace Vk
 
             if (curl_easy_perform(curl) == CURLE_OK)
             {
-                json jsn_obj = json::parse(buffer);
-                json jsn_response = jsn_obj["response"];
-                json jsn_items = jsn_response["items"];
+                Vk::Client::json jsn_obj = json::parse(buffer);
+                Vk::Client::json jsn_response = jsn_obj["response"];
+                Vk::Client::json jsn_items = jsn_response["items"];
                 int counter = 0;
 
                 for (json::iterator it = jsn_items.begin(); it != jsn_items.end(); ++it)
                 {
                     std::cout << ++counter << ". ";
 
-                    json jsn_id = it.value()["id"];
+                    Vk::Client::json jsn_id = it.value()["id"];
                     if (!jsn_id.is_null())
                         std::cout << "id" << ": " << jsn_id.begin().value() << std::endl;
 
-                    json jsn_fname = it.value()["first_name"];
+                    Vk::Client::json jsn_fname = it.value()["first_name"];
                     if (!jsn_fname.is_null())
                         std::cout << "first name" << ": " << jsn_fname.begin().value() << std::endl;
 
-                    json jsn_lname = it.value()["last_name"];
+                    Vk::Client::json jsn_lname = it.value()["last_name"];
                     if (!jsn_lname.is_null())
                         std::cout << "last name" << ": " << jsn_lname.begin().value() << std::endl;
 
-                    json jsn_bdate = it.value()["bdate"];
+                    Vk::Client::json jsn_bdate = it.value()["bdate"];
                     if (!jsn_bdate.is_null())
                         std::cout << "birthday" << ": " << jsn_bdate.begin().value() << std::endl;
 
-                    json jsn_online = it.value()["online"];
+                    Vk::Client::json jsn_online = it.value()["online"];
                     if (!jsn_online.is_null())
                         std::cout << "online" << ": " << (jsn_online.begin().value() == 1 ? "yes" : "no") << std::endl;
                 }
             }
         }
-
         curl_easy_cleanup(curl);
+	return nullptr;
     }
 
     auto Client::write_callback(char *data, size_t size, size_t nmemb, std::string &buff) -> size_t

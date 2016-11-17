@@ -2,7 +2,7 @@
 #include <map>
 #include <iostream>
 
-std::map<std::string, std::string> get_valid_settings()
+std::map<std::string, std::string> gettingtoken()
 {
     std::string token;
     std::cout << "Follow the link to get access token" << std::endl;

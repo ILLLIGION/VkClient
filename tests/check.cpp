@@ -1,4 +1,4 @@
-#include <vk/client.hpp>
+#include "../include/vk/client.hpp"
 #include "validInit.hpp"
 #include "catch.hpp"
 
@@ -21,7 +21,7 @@ SCENARIO("client must check connection using a token")
 
     GIVEN("a valid token")
     {
-        std::map<std::string, std::string> valid_settings(get_valid_settings());
+        std::map<std::string, std::string> valid_settings(gettingtoken());
 
         WHEN("initialize client")
         {
@@ -34,3 +34,22 @@ SCENARIO("client must check connection using a token")
         }
     }
 }
+
+SCENARIO("client must get friendlist")
+{
+        GIVEN("a wrong friendlist, an authorised client")
+        {
+                Vk::Client::json friends = R"([{"bdate":"1.2.3456","first_name":"Никита","id":123456789,"last_name":"Дацук","online":1}])"_json;
+                std::map<std::string, std::string> valid_settings(gettingtoken());
+                Vk::Client client(valid_settings);
+                WHEN("get friends")
+                {
+                        Vk::Client::json friend_list = client.get_friends();
+                        THEN("")
+                        {
+                                REQUIRE(friends != friend_list);
+                        }
+                }
+        }
+}
+
