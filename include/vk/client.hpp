@@ -1,6 +1,8 @@
 #include <string>
 #include <map>
+#include <vector>
 #include "json.hpp"
+#include "friend.hpp"
 
 namespace Vk
 {
@@ -11,7 +13,7 @@ namespace Vk
         using dict_t = std::map<std::string, std::string>;
         Client(dict_t settings) : _settings(settings) {}
         auto check_connection() -> bool;
-        auto get_friends() -> json;
+        auto get_friends() -> std::vector<VkFriend>;
 
     private:
         dict_t _settings;
