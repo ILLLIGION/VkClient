@@ -33,4 +33,3 @@ script:
   - mkdir build
   - cd build
   - cmake .. && make
-  - ./check -s -r compact
