@@ -1,6 +1,7 @@
 #include <curl/curl.h>
 #include <iostream>
 #include "../include/vk/client.hpp"
+#include <exception>
 
 namespace Vk
 {
@@ -57,6 +58,7 @@ namespace Vk
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, buffer);
 
             if (curl_easy_perform(curl) == CURLE_OK)
+	    try
             {
                 Vk::Client::json jsn_obj = json::parse(buffer);
                 Vk::Client::json jsn_response = jsn_obj["response"];
@@ -78,8 +80,14 @@ namespace Vk
 		
                 }
             }
+	    catch(std::exception&)
+	    {
+		std::cout << "Not json objects" << std::endl;
+	    }
         }
         curl_easy_cleanup(curl);
+	for (int i=0; i<friend_list.size(); ++i)
+	friend_list[i].PrintFriend();
 	return friend_list;
     }
 

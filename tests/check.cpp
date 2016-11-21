@@ -1,6 +1,7 @@
 #include "../include/vk/client.hpp"
 #include "validInit.hpp"
 #include "catch.hpp"
+#include "vector"
 
 SCENARIO("client must check connection using a token")
 {
@@ -39,15 +40,32 @@ SCENARIO("client must get friendlist")
 {
         GIVEN("a wrong friendlist, an authorised client")
         {
-                Vk::Client::json friends = R"([{"bdate":"1.2.3456","first_name":"Никита","id":123456789,"last_name":"Дацук","online":1}])"_json;
-                std::map<std::string, std::string> valid_settings(gettingtoken());
+		std::vector<VkFriend> wrong_friend_list(0);
+                Vk::Client::json j_wrong_friend_list = R"([{"bdate":"1.2.3456","first_name":"Никита","id":123456789,"last_name":"Дацук","online":1}])"_json;
+		for (Vk::Client::json::iterator it = j_wrong_friend_list.begin(); it !=j_wrong_friend_list.end(); ++it)
+                {
+                    Vk::Client::json jsn_id = it.value()["id"];
+                    Vk::Client::json jsn_fname = it.value()["first_name"];
+                    Vk::Client::json jsn_lname = it.value()["last_name"];
+                    Vk::Client::json jsn_bdate = it.value()["bdate"];
+                    Vk::Client::json jsn_online = it.value()["online"];
+
+                    if (!jsn_id.is_null() && !jsn_fname.is_null() && !jsn_lname.is_null() && !jsn_bdate.is_null() && !jsn_online.is_null())
+                        {
+                        VkFriend vkfriend(jsn_id, jsn_fname, jsn_lname, jsn_bdate, jsn_online);
+                        wrong_friend_list.push_back(vkfriend);
+                        }
+
+                }
+
+		std::map<std::string, std::string> valid_settings(gettingtoken());
                 Vk::Client client(valid_settings);
                 WHEN("get friends")
                 {
-                        Vk::Client::json friend_list = client.get_friends();
+                        std::vector<VkFriend> friend_list = client.get_friends();
                         THEN("")
                         {
-                                REQUIRE(friends != friend_list);
+                                REQUIRE(!(friend_list == wrong_friend_list));
                         }
                 }
         }
