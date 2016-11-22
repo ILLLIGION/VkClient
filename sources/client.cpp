@@ -20,7 +20,7 @@ namespace Vk
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
             curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, fields.length());
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-            curl_easy_setopt(curl, CURLOPT_WRITEDATA, buffer);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 
             if (curl_easy_perform(curl) == CURLE_OK)
             {
@@ -55,7 +55,7 @@ namespace Vk
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
             curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, fields.length());
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-            curl_easy_setopt(curl, CURLOPT_WRITEDATA, buffer);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 
             if (curl_easy_perform(curl) == CURLE_OK)
 	    try
