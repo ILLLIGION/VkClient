@@ -17,6 +17,6 @@ namespace Vk
 
     private:
         dict_t _settings;
-        static auto write_callback(char *data, size_t size, size_t nmemb, std::string &buff) -> size_t;
+        static auto write_callback(char *data, size_t size, size_t nmemb, void* buff) -> size_t;
     };
 }
