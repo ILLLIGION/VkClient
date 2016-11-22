@@ -95,10 +95,10 @@ namespace Vk
     {
         int result = 0;
 
-        if (buff.c_str())
+        if (buff)
         {
-            buff.append(data, size * nmemb);
             result = size * nmemb;
+            ((std::string*)buff)->append(data, 0, result);
         }
 
         return result;
