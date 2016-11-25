@@ -2,10 +2,13 @@
 #include <iostream>
 #include "../include/vk/client.hpp"
 #include <exception>
+#include <thread>
+#include <mutex>
 
 namespace Vk
 {
-
+    std::mutex mutex;
+  
     auto Client::check_connection() -> bool
     {
         CURL *curl = curl_easy_init();
@@ -87,9 +90,36 @@ namespace Vk
         }
         curl_easy_cleanup(curl);
 	for (int i=0; i<friend_list.size(); ++i)
-	friend_list[i].PrintFriend();
 	return friend_list;
     }
+
+    auto Client::friend_printer(int n) -> bool
+    {
+	mutex.lock();
+	std::vector<VkFriend> friend_list = Client::get_friends();
+	for (int i=0; i<friend_list.size(); i+=n)
+		friend_list[i].PrintFriend();
+	mutex.unlock();
+    };
+  
+    auto Client::print_friends_using_threads(int num_of_threads) -> void
+    {
+	if (num_of_threads < 1 || num_of_threads > std::thread::hardware_concurrency())
+        {
+            std::cout << "Wrong number of threads." << std::endl;
+            return;
+        }
+
+	std::vector<std::thread> vector_of_threads(num_of_threads);
+	for (int i = 0; i<num_of_threads; i++)
+		vector_of_threads[i] = std::thread(&Client::friend_printer, this, num_of_threads);
+	for (int i = 0; i<num_of_threads; i++)
+	{
+		if(vector_of_threads[i].joinable())
+		vector_of_threads[i].join();
+	};
+    };
+
 
     auto Client::write_callback(char* data, size_t size, size_t nmemb, void* buff) -> size_t
     {

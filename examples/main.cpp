@@ -13,7 +13,6 @@ int main()
     if (vk_cl.check_connection())
         std::cout << "Connected." << std::endl;
 
-    vk_cl.get_friends();
-
+    vk_cl.print_friends_using_threads(3);
     return 0;
 }
