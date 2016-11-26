@@ -102,7 +102,7 @@ namespace Vk
         }
 
 	std::vector<VkFriend> friend_list_for_print = Client::get_friends();
-        auto friend_printer = [this, friend_list_for_print, num_of_threads, flag]() 
+        auto friend_printer = [&friend_list_for_print, &num_of_threads, &flag]() 
         {
 		std::lock_guard<std::mutex> lock(my_mutex);
 		if (flag)
