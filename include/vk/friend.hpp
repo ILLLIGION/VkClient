@@ -16,7 +16,7 @@ struct VkFriend
 		if (some_friend.id == another_friend.id && some_friend.fname == another_friend.fname && some_friend.lname == another_friend.lname && some_friend.bdate == another_friend.bdate && some_friend.online == another_friend.online) return true;
 		else return false;
 	}
-	auto PrintFriend () -> void
+	auto PrintFriend () const noexcept -> void
 	{
 		std::cout << "id:" << id.begin().value() << " First name:" << fname.begin().value() << " Last Name" << lname.begin().value() << " Birthday:" << bdate.begin().value() << " Online:" << online.begin().value() << std::endl;
 	}

@@ -1,13 +1,12 @@
 #include <curl/curl.h>
 #include <iostream>
-#include "../include/vk/client.hpp"
-#include <exception>
+#include <vk/client.hpp>
 #include <thread>
 #include <mutex>
 
 namespace Vk
 {
-    std::mutex mutex;
+    std::mutex my_mutex;
   
     auto Client::check_connection() -> bool
     {
@@ -93,16 +92,8 @@ namespace Vk
 	return friend_list;
     }
 
-    auto Client::friend_printer(int n) -> bool
-    {
-	mutex.lock();
-	std::vector<VkFriend> friend_list = Client::get_friends();
-	for (int i=0; i<friend_list.size(); i+=n)
-		friend_list[i].PrintFriend();
-	mutex.unlock();
-    };
   
-    auto Client::print_friends_using_threads(int num_of_threads) -> void
+    auto Client::print_friends_using_threads(int num_of_threads, bool flag) -> void
     {
 	if (num_of_threads < 1 || num_of_threads > std::thread::hardware_concurrency())
         {
@@ -110,10 +101,27 @@ namespace Vk
             return;
         }
 
+	std::vector<VkFriend> friend_list_for_print = Client::get_friends();
+        auto friend_printer = [this, friend_list_for_print, num_of_threads, flag]() 
+        {
+		std::lock_guard<std::mutex> lock(my_mutex);
+		if (flag)
+		{
+			std::time_t timer = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+			std::cout << "Start time:" << ctime(&timer) << std::endl;
+		}
+		for (int i=0; i<friend_list_for_print.size(); i+=num_of_threads)
+			friend_list_for_print[i].PrintFriend();
+		if(flag)
+		{
+			std::time_t timer = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+			std::cout << "End time:" << ctime(&timer) << std::endl;
+		}
+        };
 	std::vector<std::thread> vector_of_threads(num_of_threads);
-	for (int i = 0; i<num_of_threads; i++)
-		vector_of_threads[i] = std::thread(&Client::friend_printer, this, num_of_threads);
-	for (int i = 0; i<num_of_threads; i++)
+	for (int i = 0; i<num_of_threads; ++i)
+		vector_of_threads[i] = std::thread(friend_printer);
+	for (int i = 0; i<num_of_threads; ++i)
 	{
 		if(vector_of_threads[i].joinable())
 		vector_of_threads[i].join();
